@@ -25,5 +25,72 @@
 
 <script src="/static/script.js"></script>
 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartMaintain Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <h1>SmartMaintain</h1>
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/predict">Predict</a></li>
+            <li><a href="/cost">Cost Savings</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+
+        <!-- HEALTH CARDS -->
+        <div class="cards">
+
+            <div class="card">
+                <h3>Health Score</h3>
+                <p id="health-score">92%</p>
+            </div>
+
+            <div class="card">
+                <h3>Failure Probability</h3>
+                <p id="failure-prob">8%</p>
+            </div>
+
+            <div class="card">
+                <h3>Risk Level</h3>
+                <p id="risk-level" class="green">LOW</p>
+            </div>
+
+        </div>
+
+        <!-- TEMPERATURE CHART -->
+        <div class="chart-box">
+            <h3>Temperature Over Time</h3>
+            <canvas id="tempChart"></canvas>
+        </div>
+
+        <!-- VIBRATION CHART -->
+        <div class="chart-box">
+            <h3>Vibration Over Time</h3>
+            <canvas id="vibChart"></canvas>
+        </div>
+
+        <!-- ALERT BOX -->
+        <div class="alert-box">
+            <h3>Alerts</h3>
+            <ul>
+                <li>✔ Machine running normally.</li>
+            </ul>
+        </div>
+
+    </div>
+
+<script src="/static/js/script.js"></script>>>>>>>> a6fdfd8188dba01524ee9636feb53b044e35a1b6
+
 </body>
 </html>

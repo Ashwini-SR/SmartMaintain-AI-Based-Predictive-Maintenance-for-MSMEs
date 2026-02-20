@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predict Machine Failure</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <h1>SmartMaintain</h1>
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/predict">Predict</a></li>
+            <li><a href="/cost">Cost Savings</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <div class="upload-box">
+            <h2>Upload Sensor Data File</h2>
+
+            <form action="/predict" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" class="input-file" required>
+                <br><br>
+                <button type="submit" class="btn">Run Prediction</button>
+            </form>
+        </div>
+
+        {% if prediction %}
+        <div class="result-box">
+            <h3>Prediction Result</h3>
+
+            <p><strong>Failure Probability:</strong> {{ probability }}%</p>
+            <p><strong>Health Score:</strong> {{ health_score }}%</p>
+            <p><strong>Risk Level:</strong> {{ risk }}</p>
+
+        </div>
+        {% endif %}
+
+    </div>
+
+</body>
+</html>

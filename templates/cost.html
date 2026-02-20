@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cost Savings Analysis</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <h1>SmartMaintain</h1>
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/predict">Predict</a></li>
+            <li><a href="/cost">Cost Savings</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <h2>Cost Savings Overview</h2>
+
+        <div class="cards">
+
+            <div class="card">
+                <h3>Downtime Prevented</h3>
+                <p>{{ hours_saved }} hrs</p>
+            </div>
+
+            <div class="card">
+                <h3>Money Saved</h3>
+                <p>₹{{ money_saved }}</p>
+            </div>
+
+            <div class="card">
+                <h3>ROI</h3>
+                <p>{{ roi }} %</p>
+            </div>
+
+        </div>
+
+        <!-- Chart -->
+        <div class="chart-box">
+            <h3>Cost Comparison</h3>
+            <canvas id="costChart"></canvas>
+        </div>
+
+    </div>
+
+<script src="/static/js/script.js"></script>
+
+<script>
+const ctx = document.getElementById('costChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Before Prediction', 'After Prediction'],
+        datasets: [{
+            label: 'Cost (₹)',
+            data: [{{ before_cost }}, {{ after_cost }}],
+            borderWidth: 1
+        }]
+    }
+});
+</script>
+
+</body>
+</html>
