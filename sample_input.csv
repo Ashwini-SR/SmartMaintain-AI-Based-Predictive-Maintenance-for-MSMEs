@@ -1,0 +1,4 @@
+Air_temperature,Process_temperature,Rotational_speed,Torque
+300,310,1500,40
+305,315,1400,38
+295,305,1600,45
