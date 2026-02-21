@@ -1,30 +1,4 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>SmartMaintain Dashboard</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-
-<h1>SmartMaintain - Machine Health</h1>
-
-<div class="card">
-    <h2>Health Score</h2>
-    <p id="health">--</p>
-</div>
-
-<div class="card">
-    <h2>Failure Probability</h2>
-    <p id="probability">--</p>
-</div>
-<div class="card">
-    <h2>Risk Level</h2>
-    <p id="risk">--</p>
-</div>
-<button onclick="predict()">Check Machine</button>
-
-<script src="/static/script.js"></script>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,62 +9,82 @@
 
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <h1>SmartMaintain</h1>
-        <ul>
-            <li><a href="/dashboard">Dashboard</a></li>
-            <li><a href="/predict">Predict</a></li>
-            <li><a href="/cost">Cost Savings</a></li>
-        </ul>
-    </nav>
-
+   <nav class="navbar">
+    <h1>SmartMaintain</h1>
+    <ul>
+        <li><a href="/">Dashboard</a></li>
+    </ul>
+</nav>
     <!-- MAIN CONTENT -->
     <div class="container">
+        <!-- INPUT PANEL -->
+<div class="input-panel">
+    <h3>Enter Machine Parameters</h3>
 
+    <input type="number" id="air_temp" placeholder="Air Temperature (K)">
+    <input type="number" id="process_temp" placeholder="Process Temperature (K)">
+    <input type="number" id="rpm" placeholder="Rotational Speed (rpm)">
+    <input type="number" id="torque" placeholder="Torque (Nm)">
+    <br><br>
+    <button onclick="predict()">Analyze Machine</button>
+</div>
         <!-- HEALTH CARDS -->
         <div class="cards">
 
             <div class="card">
                 <h3>Health Score</h3>
-                <p id="health-score">92%</p>
+                <p id="health-score">--</p>
             </div>
 
             <div class="card">
                 <h3>Failure Probability</h3>
-                <p id="failure-prob">8%</p>
+                <p id="failure-prob">--</p>
             </div>
 
             <div class="card">
                 <h3>Risk Level</h3>
-                <p id="risk-level" class="green">LOW</p>
+                <p id="risk-level" class="green">--</p>
             </div>
 
         </div>
 
-        <!-- TEMPERATURE CHART -->
-        <div class="chart-box">
-            <h3>Temperature Over Time</h3>
-            <canvas id="tempChart"></canvas>
-        </div>
+         <!-- HEALTH SCORE CHART -->
+           <div class="chart-box">
+               <h3>Health Score Trend</h3>
+               <canvas id="tempChart"></canvas>
+           </div>
 
-        <!-- VIBRATION CHART -->
+<!-- FAILURE PROBABILITY CHART -->
         <div class="chart-box">
-            <h3>Vibration Over Time</h3>
-            <canvas id="vibChart"></canvas>
-        </div>
+             <h3>Failure Probability Trend</h3>
+             <canvas id="vibChart"></canvas>
+       </div>
 
-        <!-- ALERT BOX -->
-        <div class="alert-box">
-            <h3>Alerts</h3>
-            <ul>
-                <li> Machine running normally.</li>
-            </ul>
-        </div>
+       <div class="alert-box">
+    <h3>Alerts</h3>
+    <ul id="alert-list">
+        <li>No alerts yet.</li>
+    </ul>
+</div>
+        
+ <div class="card" style="margin-top:30px;">
+    <h3>Estimated Cost Savings</h3>
+    <p><strong>Breakdown Cost:</strong> ₹50,000</p>
+    <p><strong>Downtime Prevented:</strong> 10 Hours</p>
+    <p><strong>Monthly Failures Prevented:</strong> 3</p>
+    <hr>
+    <p><strong>Estimated Monthly Savings:</strong> 
+        <span id="savings">₹0</span>
+    </p>
+</div>
+<div class="card" style="margin-top:30px;">
+    <h3>Prediction History</h3>
+    <ul id="history-list"></ul>
+</div>
 
     </div>
 
-<script src="/static/js/script.js"></script>>>>>>>> a6fdfd8188dba01524ee9636feb53b044e35a1b6
+<script src="/static/js/script.js"></script>
 
 </body>
-</html>
+</html> 

@@ -4,7 +4,19 @@ body {
     font-family: Arial, sans-serif;
     color: #D6E4F0;
 }
+.input-panel {
+    margin-bottom: 30px;
+}
 
+.input-panel input {
+    padding: 6px;
+    margin: 5px;
+}
+
+.input-panel button {
+    padding: 8px 15px;
+    cursor: pointer;
+}
 /* NAVBAR */
 .navbar {
     background: #1E2D40;
