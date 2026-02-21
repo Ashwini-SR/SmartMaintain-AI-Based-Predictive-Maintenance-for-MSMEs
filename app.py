@@ -85,12 +85,12 @@ def predict():
     # -----------------------------
     # RISK LEVEL
     # -----------------------------
-    if failure_probability > 70:
-        risk = "HIGH"
-    elif failure_probability > 40:
+    if failure_probability < 15 :
+        risk = "LOW"
+    elif failure_probability <30:
         risk = "MEDIUM"
     else:
-        risk = "LOW"
+        risk = "HIGH"
 
     # -----------------------------
     # ROI CALCULATION (Expected Loss)
