@@ -20,6 +20,11 @@
         <!-- INPUT PANEL -->
 <div class="input-panel">
     <h3>Enter Machine Parameters</h3>
+    <select id="machine_id">
+    <option value="Machine_A">Machine A</option>
+    <option value="Machine_B">Machine B</option>
+    <option value="Machine_C">Machine C</option>
+</select>
 
     <input type="number" id="air_temp" placeholder="Air Temperature (K)">
     <input type="number" id="process_temp" placeholder="Process Temperature (K)">
@@ -66,8 +71,35 @@
         <li>No alerts yet.</li>
     </ul>
 </div>
-        
- <div class="card" style="margin-top:30px;">
+    <div class="card" style="margin-top:30px;">
+    <h3>AI Risk Explanation</h3>
+    <ul id="shap-explanation"></ul>
+</div>
+
+<div class="card" style="margin-top:30px;">
+    <h3>Primary Risk Driver</h3>
+    <p id="top-risk">--</p>
+</div>
+
+<div class="card" style="margin-top:30px;">
+    <h3>Feature Contribution Analysis</h3>
+    <ul id="shap-details"></ul>
+</div>
+
+<div class="card" style="margin-top:30px;">
+    <h3>Executive Summary</h3>
+    <p id="executive-summary"></p>
+</div>
+
+<h3>ROI Configuration</h3>
+
+<label>Breakdown Cost (₹ per failure)</label>
+<input type="number" id="breakdown_cost" value="30000">
+
+<label>Failures Per Month</label>
+<input type="number" id="failures_per_month" value="1">
+
+
     <h3>Estimated Cost Savings</h3>
     <p><strong>Breakdown Cost:</strong> ₹50,000</p>
     <p><strong>Downtime Prevented:</strong> 10 Hours</p>
