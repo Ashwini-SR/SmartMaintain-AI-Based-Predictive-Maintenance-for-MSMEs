@@ -55,11 +55,7 @@ window.onload = function () {
             }
         }
     });
-    document.getElementById("breakdown_cost")
-    .addEventListener("input", predict);
-
-document.getElementById("failures_per_month")
-    .addEventListener("input", predict);
+    
 
 
     // Load history automatically on page refresh
@@ -81,7 +77,10 @@ function predict() {
     breakdown_cost: Number(document.getElementById("breakdown_cost").value) || 50000,
     failures_per_month: Number(document.getElementById("failures_per_month").value) || 3
 };
-
+    if (!data.air_temp || !data.process_temp || !data.rpm || !data.torque) {
+    alert("Please fill all machine parameters.");
+    return;
+}
     fetch("/predict", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

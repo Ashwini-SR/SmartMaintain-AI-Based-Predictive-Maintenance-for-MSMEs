@@ -12,7 +12,6 @@ app = Flask(__name__)
 # -------------------------------------------------
 # LOAD MODEL
 # -------------------------------------------------
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "model", "model.pkl")
 
@@ -24,7 +23,6 @@ print("Model loaded successfully.")
 # -------------------------------------------------
 # INITIALIZE DATABASE
 # -------------------------------------------------
-
 def init_db():
     conn = sqlite3.connect("history.db")
     cursor = conn.cursor()
@@ -53,7 +51,6 @@ init_db()
 # -------------------------------------------------
 # ROUTES
 # -------------------------------------------------
-
 @app.route("/")
 def dashboard():
     return render_template("dashboard.html")
@@ -73,18 +70,29 @@ def predict():
         torque = float(data["torque"])
         machine_id = data.get("machine_id", "Machine-1")
 
-        if air_temp <= 0 or process_temp <= 0 or rpm <= 0 or torque <= 0:
-            return jsonify({"error": "All values must be positive"}), 400
+        if not (250 <= air_temp <= 400):
+           return jsonify({"error": "Air temperature out of realistic range"}), 400
+
+        if not (250 <= process_temp <= 500):
+           return jsonify({"error": "Process temperature out of realistic range"}), 400
+
+        if not (500 <= rpm <= 5000):
+            return jsonify({"error": "RPM out of realistic range"}), 400
+
+        if not (1 <= torque <= 1000):
+            return jsonify({"error": "Torque out of realistic range"}), 400
+            
 
     except (KeyError, ValueError, TypeError):
         return jsonify({"error": "Invalid input data"}), 400
 
     # -----------------------------
-    # CREATE FEATURE DATAFRAME
+    # CREATE FEATURE DF
     # -----------------------------
-    feature_values = [[air_temp, process_temp, rpm, torque]]
-    X_df = pd.DataFrame(feature_values, columns=model.feature_names_in_)
-
+    X_df = pd.DataFrame(
+    [[air_temp, process_temp, rpm, torque]],
+    columns=model.feature_names_in_
+)
     # -----------------------------
     # MODEL PREDICTION
     # -----------------------------
@@ -95,43 +103,31 @@ def predict():
     # -----------------------------
     # SHAP EXPLANATION
     # -----------------------------
-    try:
-        shap_values = explainer(X_df)
+    shap_values = explainer.shap_values(X_df)
+    if isinstance(shap_values, list):
+        shap_values = shap_values[1]
+        
+    shap_array = np.array(shap_values)
+    
 
-        # For binary classification → take class 1 values
-        shap_class_1 = shap_values.values[0][:, 1]
+    shap_dict = {}
+    for i, feature in enumerate(model.feature_names_in_):
+        shap_dict[feature] = round(float(shap_values[0][i]), 4)
 
-        shap_dict = {}
-        for i, feature in enumerate(X_df.columns):
-            shap_dict[feature] = round(float(shap_class_1[i]), 4)
+    # Identify top risk factor
+    top_feature = max(shap_dict, key=lambda k: abs(shap_dict[k]))
+    top_impact = shap_dict[top_feature]
 
-    except Exception as e:
-        print("SHAP error:", e)
-        shap_dict = {}
-
-    # -----------------------------
-    # IDENTIFY TOP RISK FACTOR
-    # -----------------------------
-    if shap_dict:
-        top_feature = max(shap_dict, key=lambda k: abs(shap_dict[k]))
-        top_impact = shap_dict[top_feature]
-    else:
-        top_feature = None
-        top_impact = None
-
-    # -----------------------------
-    # HUMAN READABLE EXPLANATION
-    # -----------------------------
+    # Human readable SHAP explanation
     recommendation_detail = []
-
     for feature, value in shap_dict.items():
         if value > 0:
             recommendation_detail.append(
-                f"{feature} is contributing to higher failure probability."
+                f"{feature} is increasing failure probability."
             )
         else:
             recommendation_detail.append(
-                f"{feature} is stabilizing the machine condition."
+                f"{feature} is stabilizing machine condition."
             )
 
     # -----------------------------
@@ -147,7 +143,6 @@ def predict():
     # -----------------------------
     # ROI CALCULATION
     # -----------------------------
-    
     breakdown_cost = float(data.get("breakdown_cost", 50000))
     failures_per_month = float(data.get("failures_per_month", 3))
 
@@ -160,7 +155,8 @@ def predict():
     # -----------------------------
     # SAVE TO DATABASE
     # -----------------------------
-    conn = sqlite3.connect("history.db")
+    DB_PATH = os.path.join(BASE_DIR, "history.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -170,16 +166,9 @@ def predict():
          risk_level, monthly_savings, timestamp)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
-        machine_id,
-        air_temp,
-        process_temp,
-        rpm,
-        torque,
-        failure_probability,
-        health_score,
-        risk,
-        monthly_savings,
-        timestamp
+        machine_id, air_temp, process_temp, rpm, torque,
+        failure_probability, health_score, risk,
+        monthly_savings, timestamp
     ))
 
     conn.commit()
@@ -205,28 +194,16 @@ def predict():
 @app.route("/history", methods=["GET"])
 def get_history():
 
-    machine_id = request.args.get("machine_id")
-
     conn = sqlite3.connect("history.db")
     cursor = conn.cursor()
 
-    if machine_id:
-        cursor.execute("""
-            SELECT machine_id, health_score,
-                   failure_probability, risk_level,
-                   monthly_savings, timestamp
-            FROM predictions
-            WHERE machine_id = ?
-            ORDER BY id ASC
-        """, (machine_id,))
-    else:
-        cursor.execute("""
-            SELECT machine_id, health_score,
-                   failure_probability, risk_level,
-                   monthly_savings, timestamp
-            FROM predictions
-            ORDER BY id ASC
-        """)
+    cursor.execute("""
+        SELECT machine_id, health_score,
+               failure_probability, risk_level,
+               monthly_savings, timestamp
+        FROM predictions
+        ORDER BY id ASC
+    """)
 
     rows = cursor.fetchall()
     conn.close()
@@ -249,6 +226,5 @@ def get_history():
 # -------------------------------------------------
 # RUN
 # -------------------------------------------------
-
 if __name__ == "__main__":
     app.run(debug=False)
