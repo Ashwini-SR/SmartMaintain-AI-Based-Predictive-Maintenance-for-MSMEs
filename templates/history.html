@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction History</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <h1>SmartMaintain</h1>
+        <ul>
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/history-page">Prediction History</a></li>
+            <li><a href="/">Back</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="container">
+
+        <h2>Prediction History</h2>
+
+        <!-- FILTER CONTROLS -->
+        <div class="controls" style="margin: 20px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+            
+            <input type="text" id="search-machine" placeholder="Search Machine ID">
+            
+            <select id="search-risk">
+                <option value="">All Risk Levels</option>
+                <option value="LOW">LOW</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="HIGH">HIGH</option>
+            </select>
+
+            <input type="date" id="search-date">
+
+            <button id="search-btn" class="btn">Search</button>
+            <button id="export-csv" class="btn">Export CSV</button>
+        </div>
+
+        <!-- SORT BUTTONS -->
+        <div class="sort-buttons" style="margin-bottom: 20px; display: flex; gap: 10px;">
+            <button id="sort-asc" class="btn">Sort ASC</button>
+            <button id="sort-desc" class="btn">Sort DESC</button>
+        </div>
+
+        <!-- HISTORY TABLE -->
+        <table id="history-table" class="history-table">
+            <thead>
+                <tr>
+                    <th>Machine</th>
+                    <th>Health</th>
+                    <th>Failure %</th>
+                    <th>Risk</th>
+                    <th>Savings</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- JS inserts rows -->
+            </tbody>
+        </table>
+
+        <!-- PAGINATION -->
+        <div class="pagination">
+            <button id="prev-page">Previous</button>
+            <span id="current-page">1</span>
+            <button id="next-page">Next</button>
+        </div>
+
+    </div>
+
+    <script src="/static/js/history.js"></script>
+
+</body>
+</html>

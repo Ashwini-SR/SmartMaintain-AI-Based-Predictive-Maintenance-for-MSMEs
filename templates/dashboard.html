@@ -12,8 +12,9 @@
    <nav class="navbar">
     <h1>SmartMaintain</h1>
     <ul>
-        <li><a href="/">Dashboard</a></li>
-    </ul>
+    <li><a href="/">Dashboard</a></li>
+    <li><a href="/history-page">Prediction History</a></li>
+</ul>
 </nav>
     <!-- MAIN CONTENT -->
     <div class="container">
@@ -52,6 +53,10 @@
                 <h3>Risk Level</h3>
                 <p id="risk-level" class="green">--</p>
             </div>
+            <div class="card">
+                <h3>Model Confidence</h3>
+                <p id="confidence-score">--</p>
+             </div>
 
         </div>
 
@@ -83,6 +88,7 @@
     <p id="top-risk">--</p>
 </div>
 
+
 <div class="card" style="margin-top:30px;">
     <h3>Feature Contribution Analysis</h3>
     <ul id="shap-details"></ul>
@@ -91,25 +97,24 @@
 <div class="card" style="margin-top:30px;">
     <h3>Executive Summary</h3>
     <p id="executive-summary"></p>
+
+    <button class="btn" style="margin-top:10px;" onclick="downloadReport()">
+        Download AI Report (PDF)
+    </button>
 </div>
-
-
-
+<div class="card savings-card">
     <h3>Estimated Cost Savings</h3>
-    <p><strong>Breakdown Cost:</strong> ₹50,000</p>
-    <p><strong>Downtime Prevented:</strong> 10 Hours</p>
-    <p><strong>Monthly Failures Prevented:</strong> 3</p>
+
+    <p><strong>Breakdown Cost:</strong> ₹<span id="display-breakdown-cost">0</span></p>
+    <p><strong>Downtime Prevented:</strong> <span id="display-downtime">0 Hours</span></p>
+    <p><strong>Monthly Failures Prevented:</strong> <span id="display-failures">0</span></p>
+
     <hr>
-    <p><strong>Estimated Monthly Savings:</strong> 
-        <span id="savings">₹0</span>
+
+    <p class="highlight-text">
+        <strong>Estimated Monthly Savings:</strong> ₹<span id="final-savings">0</span>
     </p>
 </div>
-<div class="card" style="margin-top:30px;">
-    <h3>Prediction History</h3>
-    <ul id="history-list"></ul>
-</div>
-
-    </div>
 
 <script src="/static/js/script.js"></script>
 
