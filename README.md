@@ -1,203 +1,380 @@
----
+# SmartMaintain – AI-Based Predictive Maintenance for MSMEs
 
-## SmartMaintain – AI-Based Predictive Maintenance for MSMEs
+## 1) Problem Statement
 
----
+Unplanned equipment failures in MSMEs (Micro, Small & Medium Enterprises) lead to:
 
-### 1) Problem Statement
+- Unexpected downtime
+- High emergency repair costs
+- Production delays
+- Reduced equipment lifespan
 
-Unplanned equipment failures in MSMEs (Micro, Small & Medium Enterprises) cause:
+Most MSMEs rely on reactive maintenance due to:
 
-* Unexpected downtime
-* High emergency repair costs
-* Production delays
-* Reduced equipment lifespan
+- High cost of industrial IoT solutions
+- Lack of AI/ML expertise
+- Absence of simple predictive tools
 
-Most MSMEs rely on reactive maintenance instead of predictive intelligence due to:
-
-* High cost of industrial IoT systems
-* Lack of data science expertise
-* No affordable AI-based solution
-
-**Objective:**
-Build a low-cost, AI-driven predictive maintenance system that estimates machine failure probability and provides risk classification for proactive decision-making.
+**Objective:** Build a low-cost, ML-driven predictive maintenance system that estimates machine failure probability and enables proactive decision-making.
 
 ---
 
-### 2) Proposed Solution
+## 2) Proposed Solution
 
-SmartMaintain is a lightweight web-based predictive maintenance system that:
+SmartMaintain is a lightweight web-based system that:
 
-* Accepts machine sensor data (CSV upload)
-* Predicts failure probability using ML model
-* Calculates health score
-* Classifies risk level (Low / Medium / High)
-* Estimates cost savings from preventive action
+- Accepts machine parameters (temperature, RPM, torque)
+- Predicts failure probability using ML
+- Calculates machine health score
+- Classifies risk level (Low / Medium / High)
+- Estimates cost savings from preventive action
+- Stores prediction history for trend analysis
 
-Designed specifically for MSMEs with minimal technical overhead.
-
----
-
-### 🔗 Live Application
-
-Access the deployed project here:
-[https://smartmaintain-ai-based-predictive.onrender.com](https://smartmaintain-ai-based-predictive.onrender.com)
+**Live Application:**  
+https://smartmaintain-ai-based-predictive.onrender.com
 
 ---
 
-### 3) Architecture Diagram (Text Version)
+## 3) Machine Learning Approach
 
-You can later convert this into a visual diagram.
+### Models Explored
+
+- Linear Regression (baseline understanding)
+- Decision Tree (interpretable model)
+- Random Forest (final model)
+
+### Final Model
+
+**RandomForestClassifier**
+
+### Reasons:
+
+- Captures nonlinear relationships in sensor data
+- Robust to noise
+- Works well with imbalanced datasets
+- Provides probability outputs (`predict_proba`)
+
+### Handling Class Imbalance:
+
+```python
+class_weight = "balanced"
+```
+
+---
+
+## 4) Dataset Explanation
+
+**Dataset:** AI4I 2020 Predictive Maintenance Dataset
+
+### Characteristics:
+
+- 10,000 records
+- 14 features
+- Simulated industrial machine sensor data
+
+### Features Used:
+
+- Air Temperature (K)
+- Process Temperature (K)
+- Rotational Speed (RPM)
+- Torque (Nm)
+
+### Target:
+
+- Machine Failure (0 / 1)
+
+### Class Distribution:
+
+- Normal: 9661
+- Failure: 339
+
+This strong imbalance influences model behavior and probability calibration.
+
+---
+
+## 5) Model Performance
+
+- **Accuracy:** 98.1%
+
+### Confusion Matrix:
+
+```python
+[[1926   6]
+ [  32  36]]
+```
+
+### Classification Report (Failure class):
+
+- Precision: 0.86
+- Recall: 0.53
+
+---
+
+## 6) Recall Justification and Threshold Strategy
+
+The dataset is highly imbalanced (only 3.4% failures).
+
+### Observations:
+
+- Model is conservative in predicting failures
+- Increasing recall would increase false positives
+
+### Trade-off:
+
+- High precision (0.86) → avoids unnecessary maintenance
+- Moderate recall (0.53) → some failures may be missed
+
+### Strategy:
+
+Instead of hard classification:
+
+- Use probability scores (`predict_proba`)
+- Assign risk levels using thresholds
+
+### Threshold Logic:
+
+- 0–15% → Low
+- 15–30% → Medium
+- >30% → High
+
+### Justification:
+
+Even a 30% probability is considered high risk due to rarity of failures.
+
+### Benefits:
+
+- Flexible threshold tuning
+- Better operational decision-making
+- Balanced false positives vs false negatives
+
+---
+
+## 7) Feature Importance (Model Explainability)
+
+Key influencing features:
+
+- Torque (highest impact)
+- Rotational Speed
+- Process Temperature
+- Air Temperature
+
+### Interpretation:
+
+- Higher torque and RPM increase mechanical stress
+- Temperature differences indicate abnormal operating conditions
+- Combined effect leads to higher failure probability
+
+---
+
+## 8) Output and Results
+
+System outputs:
+
+- Failure Probability (%)
+- Health Score (%)
+- Risk Level (Low / Medium / High)
+- Estimated Monthly Cost Savings
+
+### Example:
+
+- Failure Probability: 26.5%
+- Health Score: 73%
+- Risk Level: Medium
+
+---
+
+## 9) Visualization and UI
+
+### Dashboard Includes:
+
+- Health Score display
+- Failure Probability display
+- Risk level indicator with color coding
+
+### Charts (Chart.js):
+
+- Health Score over time
+- Failure Probability over time
+
+### Additional Features:
+
+- Alert system based on risk level
+- Prediction history tracking
+
+---
+
+## 10) API Documentation
+
+### Endpoint: `POST /predict`
+
+#### Request:
+
+```json
+{
+  "air_temp": 325,
+  "process_temp": 335,
+  "rpm": 2100,
+  "torque": 65
+}
+```
+
+#### Response:
+
+```json
+{
+  "failure_probability": 26.5,
+  "health_score": 73,
+  "risk_level": "MEDIUM",
+  "monthly_savings": 45000,
+  "timestamp": "2026-03-24 22:30:00"
+}
+```
+
+---
+
+### Endpoint: `GET /history`
+
+#### Response:
+
+Returns list of past predictions including:
+
+- health_score
+- failure_probability
+- risk_level
+- timestamp
+
+---
+
+## 11) Architecture
 
 ```
-Machine Sensor Data (CSV)
+Input Parameters
         ↓
 Flask Backend (app.py)
         ↓
-Load Trained ML Model (model.pkl)
+Load ML Model (model.pkl)
         ↓
-Failure Probability Prediction
+Predict Failure Probability
         ↓
-Risk Classification + Health Score
+Apply Threshold Logic
         ↓
-Frontend Dashboard Display
+Generate Risk + Health Score + Savings
+        ↓
+Store in Database (SQLite)
+        ↓
+Frontend Dashboard Visualization
 ```
 
-If you want stronger impact, create diagram using:
+---
 
-* Draw.io
-* Canva
-* Lucidchart
+## 12) Tech Stack
+
+### Backend:
+
+- Python
+- Flask
+- Pandas
+- Scikit-learn
+- Joblib
+- SQLite
+
+### Frontend:
+
+- HTML
+- CSS
+- JavaScript
+- Chart.js
+
+### Version Control:
+
+- Git
+- GitHub
 
 ---
 
-### 4) Tech Stack
-
-#### Backend
-
-* Python
-* Flask
-* Pandas
-* Scikit-learn
-* Joblib
-
-#### Frontend
-
-* HTML
-* CSS
-* JavaScript
-
-#### ML Model
-
-* Classification model (predict_proba)
-* Trained using industrial equipment dataset
-
-#### Version Control
-
-* Git
-* GitHub
-
----
-
-### 5) Project Structure
+## 13) Project Structure
 
 ```
 smartmaintain/
-│
+
 ├── app.py
 ├── requirements.txt
-│
+
 ├── model/
 │   ├── train_model.py
 │   └── model.pkl
-│
+
 ├── data/
 │   └── dataset.csv
-│
+
 ├── templates/
 │   ├── dashboard.html
 │   ├── predict.html
 │   └── cost.html
-│
+
 └── static/
-    ├── style.css
-    └── script.js
+    ├── css/style.css
+    └── js/script.js
 ```
 
 ---
 
-### 6) How to Run Locally
-
-#### Step 1 — Clone Repository
+## 14) How to Run Locally
 
 ```bash
-git clone <your-repo-link>
+git clone <repo-link>
 cd smartmaintain
-```
 
-#### Step 2 — Create Virtual Environment
-
-```bash
 python -m venv venv
 venv\Scripts\activate
-```
 
-#### Step 3 — Install Dependencies
-
-```bash
 pip install -r requirements.txt
-```
 
-#### Step 4 — Train Model (If model.pkl not present)
-
-```bash
 python model/train_model.py
-```
 
-#### Step 5 — Run Application
-
-```bash
 python app.py
 ```
 
-Open:
-
-```
-http://127.0.0.1:5000
-```
+Open: http://127.0.0.1:5000
 
 ---
 
-### 7) Features
+## 15) Features
 
-* CSV-based industrial sensor upload
-* Real-time failure probability prediction
-* Risk classification
-* Machine health score
-* ROI and cost-saving estimation module
-* Defensive error handling for production safety
-
----
-
-### 8) Innovation Aspect
-
-Unlike high-cost industrial IoT systems:
-
-* Designed specifically for MSMEs
-* Minimal hardware dependency
-* Simple CSV ingestion model
-* Lightweight deployment
-* Easily integrable with existing ERP systems
+- Real-time failure prediction
+- Risk classification
+- Health scoring system
+- Cost-saving estimation
+- Historical tracking with database
+- Chart-based visualization
+- Input validation and error handling
 
 ---
 
-### 9) Future Scope
+## 16) Innovation (Improved)
 
-* Real-time IoT sensor integration
-* Dashboard analytics charts
-* Model retraining pipeline
-* Cloud deployment
-* SMS/Email alert system
-* Feature importance visualization
+| Aspect | Traditional Systems | SmartMaintain |
+|------|------------------|--------------|
+| Cost | High (IoT hardware required) | Low (software-only) |
+| Setup | Complex | Simple |
+| Data Source | Real-time sensors | Manual / CSV input |
+| Accessibility | Large industries | MSMEs |
+| Deployment | Heavy infrastructure | Lightweight web app |
+
+### Key Innovation:
+
+- Eliminates need for expensive IoT setup
+- Uses minimal input features for prediction
+- Converts ML output into actionable business insights
+- Integrates prediction + cost savings + visualization
 
 ---
+
+## 17) Future Scope
+
+- IoT sensor integration
+- Automated retraining pipeline
+- Advanced analytics dashboard
+- Alert system (Email/SMS)
+- Feature importance visualization in UI
+- Cloud scaling
