@@ -1,8 +1,10 @@
- SmartMaintain – AI-Based Predictive Maintenance for MSMEs
+---
+
+## SmartMaintain – AI-Based Predictive Maintenance for MSMEs
 
 ---
 
-1) Problem Statement
+### 1) Problem Statement
 
 Unplanned equipment failures in MSMEs (Micro, Small & Medium Enterprises) cause:
 
@@ -22,7 +24,7 @@ Build a low-cost, AI-driven predictive maintenance system that estimates machine
 
 ---
 
-2) Proposed Solution
+### 2) Proposed Solution
 
 SmartMaintain is a lightweight web-based predictive maintenance system that:
 
@@ -36,7 +38,14 @@ Designed specifically for MSMEs with minimal technical overhead.
 
 ---
 
-3) Architecture Diagram (Text Version)
+### 🔗 Live Application
+
+Access the deployed project here:
+[https://smartmaintain-ai-based-predictive.onrender.com](https://smartmaintain-ai-based-predictive.onrender.com)
+
+---
+
+### 3) Architecture Diagram (Text Version)
 
 You can later convert this into a visual diagram.
 
@@ -62,9 +71,9 @@ If you want stronger impact, create diagram using:
 
 ---
 
-4) Tech Stack
+### 4) Tech Stack
 
-### Backend
+#### Backend
 
 * Python
 * Flask
@@ -72,25 +81,25 @@ If you want stronger impact, create diagram using:
 * Scikit-learn
 * Joblib
 
-### Frontend
+#### Frontend
 
 * HTML
 * CSS
 * JavaScript
 
-### ML Model
+#### ML Model
 
 * Classification model (predict_proba)
 * Trained using industrial equipment dataset
 
-### Version Control
+#### Version Control
 
 * Git
 * GitHub
 
 ---
 
-5) Project Structure
+### 5) Project Structure
 
 ```
 smartmaintain/
@@ -117,35 +126,35 @@ smartmaintain/
 
 ---
 
-6) How to Run Locally
+### 6) How to Run Locally
 
-### Step 1 — Clone Repository
+#### Step 1 — Clone Repository
 
 ```bash
 git clone <your-repo-link>
 cd smartmaintain
 ```
 
-### Step 2 — Create Virtual Environment
+#### Step 2 — Create Virtual Environment
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-### Step 3 — Install Dependencies
+#### Step 3 — Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Step 4 — Train Model (If model.pkl not present)
+#### Step 4 — Train Model (If model.pkl not present)
 
 ```bash
 python model/train_model.py
 ```
 
-### Step 5 — Run Application
+#### Step 5 — Run Application
 
 ```bash
 python app.py
@@ -159,7 +168,7 @@ http://127.0.0.1:5000
 
 ---
 
-7) Features
+### 7) Features
 
 * CSV-based industrial sensor upload
 * Real-time failure probability prediction
@@ -170,7 +179,7 @@ http://127.0.0.1:5000
 
 ---
 
-8) Innovation Aspect
+### 8) Innovation Aspect
 
 Unlike high-cost industrial IoT systems:
 
@@ -182,7 +191,7 @@ Unlike high-cost industrial IoT systems:
 
 ---
 
- 9) Future Scope
+### 9) Future Scope
 
 * Real-time IoT sensor integration
 * Dashboard analytics charts
@@ -190,3 +199,5 @@ Unlike high-cost industrial IoT systems:
 * Cloud deployment
 * SMS/Email alert system
 * Feature importance visualization
+
+---
